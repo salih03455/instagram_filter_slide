@@ -1,0 +1,41 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+.page {
+	width: 759px;
+	height: 1280px;
+	background: #eee;
+	margin: 50px auto;
+}
+
+.wrapper {
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+}
+
+.box-wrap {
+	font-size: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
+	transition: .3s linear;
+}
+
+.box {
+	display: inline-block;
+	box-sizing: border-box;
+	border:2px solid #fff;
+}
+
+.box.active {
+	border-color: #ccc;
+}
+
+.box img {
+	display: block;
+	max-width: 100%;
+	max-height: 100%;
+}
