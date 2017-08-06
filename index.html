@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="page">
+    <div id="instaSlide">
 		<div class="wrapper">
 			<div class="box-wrap" style="transform: translate(0)">
 				<div class="box active">1
@@ -218,7 +218,7 @@
 	<script>
 		var obj = {
 			boxes : document.querySelectorAll('.box'),
-			page : document.querySelector('.page'),
+			instaSlide : document.querySelector('#instaSlide'),
 			boxWrap : document.querySelector('.box-wrap'),
 			wrapper : document.querySelector('.wrapper'),
 			activeBox : document.querySelector('.active'),
@@ -229,99 +229,82 @@
 			},
 			sizeCreate : function() {
 				return { 
-					pageWidth : this.page.offsetWidth,
-					boxWidth : this.page.offsetWidth / 3.5
+					instaSlideWidth : this.instaSlide.offsetWidth,
+					boxWidth : this.instaSlide.offsetWidth / 3.5
 				}
 			},
 			addSizes : function() {
-				this.boxWrap.style.width = this.boxes.length * (obj.page.offsetWidth / 3.5) + 'px';
+				this.boxWrap.style.width = this.boxes.length * (obj.instaSlide.offsetWidth / 3.5) + 'px';
 				this.wrapper.style.height = this.sizeCreate().boxWidth + 'px';
 			},
 			boxLoop : function(){
 				for (i = 0; i < this.boxes.length; i++) {
 					var box = this.boxes[i];
 					box.setAttribute('id', i+1);
-					box.style.width = (obj.page.offsetWidth / 3.5) + 'px';
+					box.style.width = (obj.instaSlide.offsetWidth / 3.5) + 'px';
 
 					box.onclick = function(){
 						var thisId = this.getAttribute('id');
 						var afterBox = document.getElementById(parseInt(thisId) + 1);
 						var beforeBox = document.getElementById(parseInt(thisId) - 1);
-						var thisRight =  (obj.wrapper.offsetLeft + obj.wrapper.offsetWidth) - (this.getBoundingClientRect().left + (obj.page.offsetWidth / 3.5)); // tıklanan kutunun sağa olan uzaklığı
+						var thisRight =  (obj.wrapper.offsetLeft + obj.wrapper.offsetWidth) - (this.getBoundingClientRect().left + (obj.instaSlide.offsetWidth / 3.5)); // tıklanan kutunun sağa olan uzaklığı
 						var thisLeft = this.getBoundingClientRect().left - obj.wrapper.offsetLeft; // tıklanan kutunun sola olan uzaklığı
-						console.log(thisRight);
-						console.log(thisRight.toFixed());
-						if (parseInt(obj.activeBox.getAttribute('id')) < thisId) {
-							console.log('aktifin sağına tıklandı');
-							if (afterBox !== null) {
-								if (thisRight < (obj.page.offsetWidth / 3.5)){
-									if (thisRight.toFixed() < 0) {
-										obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft - ((obj.page.offsetWidth / 3.5) + ((obj.page.offsetWidth / 3.5) / 2))) + "px)";
-										obj.boxWrapLeft = obj.boxWrapLeft - ((obj.page.offsetWidth / 3.5) + (obj.page.offsetWidth / 3.5 / 2));
+						console.log(thisLeft.toFixed(4));
+						console.log(thisRight.toFixed(4));
+						if (parseInt(obj.activeBox.getAttribute('id')) < thisId) { // aktifin sağına tıklanmışsa
+							if (afterBox !== null) { // aktif klası en sağda değilse
+								if (thisRight < (obj.instaSlide.offsetWidth / 3.5)){ // sağda bir kutudan az varsa
+									if (thisRight.toFixed(4) < -0.5) {
+										obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft - ((obj.instaSlide.offsetWidth / 3.5) + ((obj.instaSlide.offsetWidth / 3.5) / 2))) + "px)";
+										obj.boxWrapLeft = obj.boxWrapLeft - ((obj.instaSlide.offsetWidth / 3.5) + (obj.instaSlide.offsetWidth / 3.5 / 2));
 									}
-									if (thisRight.toFixed() == 0) {
-										obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft - (obj.page.offsetWidth / 3.5)) + "px)";
-										obj.boxWrapLeft = obj.boxWrapLeft - (obj.page.offsetWidth / 3.5);
+									if (-0.5 < thisRight.toFixed(4) && thisRight.toFixed(4) < 0.5) {
+										obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft - (obj.instaSlide.offsetWidth / 3.5)) + "px)";
+										obj.boxWrapLeft = obj.boxWrapLeft - (obj.instaSlide.offsetWidth / 3.5);
 									}
-									if (thisRight.toFixed() > 0) {
-										obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft - ((obj.page.offsetWidth / 3.5) / 2)) + "px)";
-										obj.boxWrapLeft = obj.boxWrapLeft - ((obj.page.offsetWidth / 3.5) / 2);
+									if (thisRight.toFixed(4) > 0.5) {
+										obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft - ((obj.instaSlide.offsetWidth / 3.5) / 2)) + "px)";
+										obj.boxWrapLeft = obj.boxWrapLeft - ((obj.instaSlide.offsetWidth / 3.5) / 2);
 									}
-
-									
-								} else if (thisRight == (obj.page.offsetWidth / 3.5)){
-									console.log('Sağda tam bir kutu var');
-								} else {
-									console.log('Sağda bir kutudan fazlası var');
 								}
 							}
-							if (afterBox == null) {
-								if (thisRight.toFixed() < 0) {
-									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft - ((obj.page.offsetWidth / 3.5) + (obj.page.offsetWidth / 3.5 / 2))) + "px)";
-									obj.boxWrapLeft = obj.boxWrapLeft - ((obj.page.offsetWidth / 3.5) + (obj.page.offsetWidth / 3.5 / 2));
+							if (afterBox == null) { // aktif klası en sağdaysa
+								if (thisRight.toFixed(4) < -0.5) {
+									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft - ((obj.instaSlide.offsetWidth / 3.5) + (obj.instaSlide.offsetWidth / 3.5 / 2))) + "px)";
+									obj.boxWrapLeft = obj.boxWrapLeft - ((obj.instaSlide.offsetWidth / 3.5) + (obj.instaSlide.offsetWidth / 3.5 / 2));
 								}
 							}
-
 						}
-						if (parseInt(obj.activeBox.getAttribute('id') == thisId)) {
-							console.log('aktife tıklandı');
-							
-						}
-						if (parseInt(obj.activeBox.getAttribute('id')) > thisId) {
-							console.log('aktifin soluna tıklandı');
-							
+						if (parseInt(obj.activeBox.getAttribute('id')) > thisId) { // aktifin soluna tıklanmışsa
 							if (beforeBox !== null) {
-								if (thisLeft.toFixed() < 0) {
-									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft + (obj.page.offsetWidth / 3.5) + ((obj.page.offsetWidth / 3.5) / 2)) + "px)";
-									obj.boxWrapLeft = obj.boxWrapLeft + (obj.page.offsetWidth / 3.5) + ((obj.page.offsetWidth / 3.5) / 2);
+								if (thisLeft.toFixed(4) < -0.5) {
+									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft + (obj.instaSlide.offsetWidth / 3.5) + ((obj.instaSlide.offsetWidth / 3.5) / 2)) + "px)";
+									obj.boxWrapLeft = obj.boxWrapLeft + (obj.instaSlide.offsetWidth / 3.5) + ((obj.instaSlide.offsetWidth / 3.5) / 2);
 								}
-								if (thisLeft.toFixed() == 0) {
-									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft + (obj.page.offsetWidth / 3.5)) + "px)";
-									obj.boxWrapLeft = obj.boxWrapLeft + (obj.page.offsetWidth / 3.5);
+								if (-0.5 < thisLeft.toFixed(4) && thisLeft.toFixed(4) < 0.5) {
+									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft + (obj.instaSlide.offsetWidth / 3.5)) + "px)";
+									obj.boxWrapLeft = obj.boxWrapLeft + (obj.instaSlide.offsetWidth / 3.5);
 								}
-								if (thisLeft.toFixed() > 0) {
-									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft + (obj.page.offsetWidth / 3.5 / 2)) + "px)";
-									obj.boxWrapLeft = obj.boxWrapLeft + (obj.page.offsetWidth / 3.5 / 2);
+								if (thisLeft.toFixed(4) > 0.5) {
+									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft + (obj.instaSlide.offsetWidth / 3.5 / 2)) + "px)";
+									obj.boxWrapLeft = obj.boxWrapLeft + (obj.instaSlide.offsetWidth / 3.5 / 2);
 								}
 							}
 							if (beforeBox == null) {
-								if (thisLeft.toFixed() < 0) {
-									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft + ((obj.page.offsetWidth / 3.5) / 2)) + "px)";
-									obj.boxWrapLeft = obj.boxWrapLeft + ((obj.page.offsetWidth / 3.5) / 2);
+								if (thisLeft.toFixed(4) < -0.5) {
+									obj.boxWrap.style.transform = "translate(" + parseFloat(obj.boxWrapLeft + ((obj.instaSlide.offsetWidth / 3.5) / 2)) + "px)";
+									obj.boxWrapLeft = obj.boxWrapLeft + ((obj.instaSlide.offsetWidth / 3.5) / 2);
 								}								
 							}
 						}
-						
 						obj.activeBox.classList.remove('active');
 						this.classList.add('active');
 						obj.activeBox = document.querySelector('.active');
 					}
 				}
 			}
-			
 		};
 		obj.init();
-		
 	</script>
 </body>
 </html>
